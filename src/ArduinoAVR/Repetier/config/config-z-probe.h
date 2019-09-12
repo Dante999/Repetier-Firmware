@@ -3,53 +3,109 @@
 
 /* Z-Probing */
 
-/* After homing the z position is corrected to compensate
-for a bed coating. Since you can change coatings the value is stored in
-EEPROM if enabled, so you can switch between different coatings without needing
-to recalibrate z.
-*/
-#define Z_PROBE_Z_OFFSET 0 // offset to coating form real bed level
-/* How is z min measured
- 0 = trigger is height of real bed neglecting coating
- 1 = trigger is current coating
- 
- For mode 1 the current coating thickness is added to measured z probe distances.
- That way the real bed is always the reference height. For inductive sensors
- or z min endstops the coating has no effect on the result, so you should use mode 0.
-*/
-#define Z_PROBE_Z_OFFSET_MODE 0
+#define FEATURE_Z_PROBE true
 
-#define FEATURE_Z_PROBE 1
 // Especially if you have more then 1 extruder acting as z probe this is important!
 #define EXTRUDER_IS_Z_PROBE 0
-// Disable all heaters before probing - required for inductive sensors
-#define Z_PROBE_DISABLE_HEATERS 0
+
 #define Z_PROBE_PIN 33
 #define Z_PROBE_PULLUP 1
 #define Z_PROBE_ON_HIGH 0
-#define Z_PROBE_X_OFFSET 0
-#define Z_PROBE_Y_OFFSET 0
-#define Z_PROBE_BED_DISTANCE 5.0 // Higher than max bed level distance error in mm
 
-// Waits for a signal to start. Valid signals are probe hit and ok button.
-// This is needful if you have the probe trigger by hand.
+/**
+ * How is z min measured
+ * 0 = trigger is height of real bed neglecting coating
+ * 1 = trigger is current coating
+ *
+ * For mode 1 the current coating thickness is added to measured z probe distances.
+ * That way the real bed is always the reference height. For inductive sensors
+ * or z min endstops the coating has no effect on the result, so you should use mode 0.
+ */
+#define Z_PROBE_Z_OFFSET_MODE 0
+
+/**
+ * offset to coating form real bed level
+ * 
+ * After homing the z position is corrected to compensate
+ * for a bed coating. Since you can change coatings the value is stored in
+ * EEPROM if enabled, so you can switch between different coatings without 
+ * needing to recalibrate z.
+ */
+#define Z_PROBE_Z_OFFSET 0
+
+#define Z_PROBE_X_OFFSET -21.5
+#define Z_PROBE_Y_OFFSET -17.7
+
+/** 
+ * Distance between nozzle and bed when probe triggers. 
+ */
+#define Z_PROBE_HEIGHT 5
+
+/**
+ * Distance to safely switch off probe after it was activated
+ * how much is needed to go up to untrigger probe 
+ */
+#define Z_PROBE_SWITCHING_DISTANCE 1.5 
+
+/**
+ * Higher than max bed level distance error in mm
+ */
+#define Z_PROBE_BED_DISTANCE 5.0 
+
+/**
+ * Disable all heaters before probing - required for inductive sensors
+ */
+#define Z_PROBE_DISABLE_HEATERS 0
+
+/**
+ * Waits for a signal to start. Valid signals are probe hit and ok button.
+ * This is needful if you have the probe trigger by hand.
+ */
 #define Z_PROBE_WAIT_BEFORE_TEST 0
-/** Speed of z-axis in mm/s when probing */
+
+/** 
+ * Speed of z-axis in mm/s when probing 
+ */
 #define Z_PROBE_SPEED 2
-/** Delay before going down. Needed for piezo endstops to reload safely. */
-#define Z_PROBE_DELAY 0
+
+/**
+ * Speed of x-axis and y-axis in mms/s when probing
+ */
 #define Z_PROBE_XY_SPEED 150
-#define Z_PROBE_SWITCHING_DISTANCE 1.5 // Distance to safely switch off probe after it was activated
-#define Z_PROBE_REPETITIONS 5 // Repetitions for probing at one point.
-#define Z_PROBE_USE_MEDIAN 0 // 1 = use middle value, 0 = use average of measurements.
-/** Distance between nozzle and bed when probe triggers. */
-#define Z_PROBE_HEIGHT 39.91
-/** These scripts are run before resp. after the z-probe is done. Add here code to activate/deactivate probe if needed. */
+
+/** 
+ * Delay before going down. Needed for piezo endstops to reload safely. 
+ */
+#define Z_PROBE_DELAY 0
+
+/**
+ * Repetitions for probing at one point.
+ */
+#define Z_PROBE_REPETITIONS 5
+
+/**
+ * 0 = use average of measurements
+ * 1 = use middle value
+ */
+#define Z_PROBE_USE_MEDIAN 0 
+
+/** 
+ * These scripts are run before resp. after the z-probe is done. Add here code 
+ * to activate/deactivate probe if needed. 
+ */
 #define Z_PROBE_START_SCRIPT ""
 #define Z_PROBE_FINISHED_SCRIPT ""
-/** Set 1 if you need a hot extruder for good probe results. Normally only required if nozzle is probe. */
+
+/** 
+ * Set 1 if you need a hot extruder for good probe results. 
+ * Normally only required if nozzle is probe. 
+ */
 #define Z_PROBE_REQUIRES_HEATING 0
-/** Minimum extruder temperature for probing. If it is lower, it will be increased to that value. */
+
+/** 
+ * Minimum extruder temperature for probing. If it is lower, it will be 
+ * increased to that value. 
+ */
 #define Z_PROBE_MIN_TEMPERATURE 150
 
 /*
@@ -74,18 +130,29 @@ bending to both sides of the axis. So probe points 2 and 3 build the symmetric a
 point 1 is mirrored to 1m across the axis. Using the symmetry we then remove the bending
 from 1 and use that as plane.
 */
-#define BED_LEVELING_METHOD 0
-/* How to correct rotation.
-0 = software side
-1 = motorized modification of 2 from 3 fixture points.
-*/
+#define BED_LEVELING_METHOD 1
+
+/**
+ *  How to correct rotation.
+ * 0 = software side
+ * 1 = motorized modification of 2 from 3 fixture points.
+ */
 #define BED_CORRECTION_METHOD 0
-// Grid size for grid based plane measurement
+
+/**
+ * Grid size for grid based plane measurement
+ */
 #define BED_LEVELING_GRID_SIZE 4
-// Repetitions for motorized bed leveling
+
+/**
+ * Repetitions for motorized bed leveling
+ */
 #define BED_LEVELING_REPETITIONS 5
-/* These are the motor positions relative to bed origin. Only needed for
-motorized bed leveling */
+
+/**
+ * These are the motor positions relative to bed origin. Only needed for
+ * motorized bed leveling 
+ */
 #define BED_MOTOR_1_X 0
 #define BED_MOTOR_1_Y 0
 #define BED_MOTOR_2_X 200

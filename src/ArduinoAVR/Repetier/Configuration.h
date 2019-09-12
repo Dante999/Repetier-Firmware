@@ -1,158 +1,207 @@
-/*
-    This file is part of Repetier-Firmware.
-
-    Repetier-Firmware is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Repetier-Firmware is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Repetier-Firmware.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+/**
+ * This file is part of Repetier-Firmware.
+ * 
+ * Repetier-Firmware is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * Repetier-Firmware is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with Repetier-Firmware.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ */
 
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
-/* Some words on units:
 
-From 0.80 onwards the units used are unified for easier configuration, watch out when transferring from older configs!
+/**
+ * ##########################################################################################
+ * ##                                        IMPORTANT                                     ##
+ * ##########################################################################################
+ * 
+ * Some words on units:
+ * From 0.80 onwards the units used are unified for easier configuration, watch out when transferring from older configs!
+ * 
+ * Speed is in mm/s
+ * Acceleration in mm/s^2
+ * Temperature is in degrees Celsius
+ * 
+ * For easy configuration, the default settings enable parameter storage in EEPROM.
+ * This means, after the first upload many variables can only be changed using the special
+ * M commands as described in the documentation. Changing these values in the configuration.h
+ * file has no effect. Parameters overridden by EEPROM settings are calibration values, extruder
+ * values except thermistor tables and some other parameter likely to change during usage
+ * like advance steps or ops mode.
+ * To override EEPROM settings with config settings, set EEPROM_MODE 0
+ * 
+ */
 
-Speed is in mm/s
-Acceleration in mm/s^2
-Temperature is in degrees Celsius
 
-
-##########################################################################################
-##                                        IMPORTANT                                     ##
-##########################################################################################
-
-For easy configuration, the default settings enable parameter storage in EEPROM.
-This means, after the first upload many variables can only be changed using the special
-M commands as described in the documentation. Changing these values in the configuration.h
-file has no effect. Parameters overridden by EEPROM settings are calibration values, extruder
-values except thermistor tables and some other parameter likely to change during usage
-like advance steps or ops mode.
-To override EEPROM settings with config settings, set EEPROM_MODE 0
-
-*/
-
-
-// BASIC SETTINGS: select your board type, thermistor type, axis scaling, and endstop configuration
-
-/** Number of extruders. Maximum 6 extruders. */
+/**
+ * Number of extruders. Maximum 6 extruders. 
+ */
 #define NUM_EXTRUDER 1
 
-/** Set to 1 if all extruder motors go to 1 nozzle that mixes your colors. */
+/** 
+ * Set to 1 if all extruder motors go to 1 nozzle that mixes your colors. 
+ */
 #define MIXING_EXTRUDER 0
 
-//// The following define selects which electronics board you have. Please choose the one that matches your setup
-// Gen3 PLUS for RepRap Motherboard V1.2 = 21
-// MEGA/RAMPS up to 1.2       = 3
-// RAMPS 1.3/RAMPS 1.4        = 33
-// Azteeg X3                  = 34
-// Azteeg X3 Pro              = 35
-// MPX3  (mainly RAMPS compatible) = 38
-// Ultimaker Shield 1.5.7     = 37
-// Gen6                       = 5
-// Gen6 deluxe                = 51
-// Sanguinololu up to 1.1     = 6
-// Sanguinololu 1.2 and above = 62
-// 3Drag/Velleman K8200       = 66 (experimental)
-// Open Motion Controller     = 91
-// Melzi board                = 63  // Define REPRAPPRO_HUXLEY if you have one for correct HEATER_1_PIN assignment!
-// Azteeg X1                  = 65
-// 3Drag/Velleman K8200 (experimental) = 66
-// Gen7 1.1 till 1.3.x        = 7
-// Gen7 1.4.1 and later       = 71
-// Sethi 3D_1                 = 72
-// Teensylu (at90usb)         = 8 // requires Teensyduino
-// Printrboard (at90usb)      = 9 // requires Teensyduino
-// Printrboard Ref. F or newer= 92 // requires Teensyduino
-// Foltyn 3D Master           = 12
-// MegaTronics 1.0            = 70
-// Megatronics 2.0            = 701
-// Megatronics 3.0            = 703 // Thermistors predefined not thermocouples
-// Minitronics 1.0            = 702
-// RUMBA                      = 80  // Get it from reprapdiscount
-// FELIXprinters              = 101
-// Rambo                      = 301
-// Rambo EInsy                = 310
-// PiBot for Repetier V1.0-1.3= 314
-// PiBot for Repetier V1.4    = 315
-// PiBot Controller V2.0      = 316
-// Sanguish Beta              = 501
-// Unique One rev. A          = 88
-// SAV MK1                    = 89
-// MJRice Pica Rev B          = 183
-// MJRice Pica Rev C          = 184
-// Zonestar ZRIB 2.1          = 39
-// User layout defined in userpins.h = 999
-
+/**
+ * The following define selects which electronics board you have. 
+ * Please choose the one that matches your setup
+ * 
+ * Gen3 PLUS for RepRap Motherboard V1.2 = 21
+ * MEGA/RAMPS up to 1.2       = 3
+ * RAMPS 1.3/RAMPS 1.4        = 33
+ * Azteeg X3                  = 34
+ * Azteeg X3 Pro              = 35
+ * MPX3  (mainly RAMPS compatible) = 38
+ * Ultimaker Shield 1.5.7     = 37
+ * Gen6                       = 5
+ * Gen6 deluxe                = 51
+ * Sanguinololu up to 1.1     = 6
+ * Sanguinololu 1.2 and above = 62
+ * 3Drag/Velleman K8200       = 66 (experimental)
+ * Open Motion Controller     = 91
+ * Melzi board                = 63  // Define REPRAPPRO_HUXLEY if you have one for correct HEATER_1_PIN assignment!
+ * Azteeg X1                  = 65
+ * 3Drag/Velleman K8200 (experimental) = 66
+ * Gen7 1.1 till 1.3.x        = 7
+ * Gen7 1.4.1 and later       = 71
+ * Sethi 3D_1                 = 72
+ * Teensylu (at90usb)         = 8 // requires Teensyduino
+ * Printrboard (at90usb)      = 9 // requires Teensyduino
+ * Printrboard Ref. F or newer= 92 // requires Teensyduino
+ * Foltyn 3D Master           = 12
+ * MegaTronics 1.0            = 70
+ * Megatronics 2.0            = 701
+ * Megatronics 3.0            = 703 // Thermistors predefined not thermocouples
+ * Minitronics 1.0            = 702
+ * RUMBA                      = 80  // Get it from reprapdiscount
+ * FELIXprinters              = 101
+ * Rambo                      = 301
+ * Rambo EInsy                = 310
+ * PiBot for Repetier V1.0-1.3= 314
+ * PiBot for Repetier V1.4    = 315
+ * PiBot Controller V2.0      = 316
+ * Sanguish Beta              = 501
+ * Unique One rev. A          = 88
+ * SAV MK1                    = 89
+ * MJRice Pica Rev B          = 183
+ * MJRice Pica Rev C          = 184
+ * Zonestar ZRIB 2.1          = 39
+ * User layout defined in userpins.h = 999
+ */
 #define MOTHERBOARD 80
 
 #include "pins.h"
 
-// Override pin definitions from pins.h
-//#define FAN_PIN   4  // Extruder 2 uses the default fan output, so move to an other pin
-//#define EXTERNALSERIAL  use Arduino serial library instead of build in. Requires more ram, has only 63 byte input buffer.
+/**
+ * Override pin definitions from pins.h
+ * 
+ * Extruder 2 uses the default fan output, so move to an other pin
+ */
+//#define FAN_PIN   4
 
-/*
-We can connect BlueTooth to serial converter module directly to boards based on AtMega2560 or AtMega1280 and some boards based on AtMega2561, AtMega1281 or AtMega1284p
-- On Melzi boards connect BT to TX1 and RX1 pins, then set BLUETOOTH_SERIAL to 1
-- On RUMBA boards connect BT to pin 11 and 12 of X3 connector, then set BLUETOOTH_SERIAL to 3
-- On RAMBO boards connect BT to pins 5,6 or 7,8 or 9,10 on Serial connector, then accordingly set BLUETOOTH_SERIAL to 1,2 or 3
-- On RAMPS we must remap Y_ENDSTOPS pins or Z_ENDSTOPZ pins or LCD_ENABLE and LCD_RS pins to another pins, and connect BT to:
-  a) signals of Y_MIN, Y_MAX, then set BLUETOOTH_SERIAL to 3 (RX from BT to Y_MIN, TX from BT to Y_MAX)
-  b) signals of Z_MIN, Z_MAX, then set BLUETOOTH_SERIAL to 1 (RX from BT to Z_MIN, TX from BT to Z_MAX)
-  c) pin 17 and 18 of AUX4 connector, then set BLUETOOTH_SERIAL to 2 (RX from BT to AUX4 p18, TX from BT to AUX4 p17)
-  Comment out or set the BLUETOOTH_SERIAL to 0 or -1 to disable this feature.
-*/
-#define BLUETOOTH_SERIAL   1                      // Port number (1..3) - For RUMBA use 3
-#define BLUETOOTH_BAUD     115200                 // communication speed
+/**
+ * Override pin definitions from pins.h
+ * 
+ * use Arduino serial library instead of build in. Requires more ram, 
+ * has only 63 byte input buffer.
+ */
+//#define EXTERNALSERIAL
 
-// Uncomment the following line if you are using Arduino compatible firmware made for Arduino version earlier then 1.0
-// If it is incompatible you will get compiler errors about write functions not being compatible!
+/**
+ * 
+ * We can connect BlueTooth to serial converter module directly to 
+ * boards based on AtMega2560 or AtMega1280 and some boards based on 
+ * AtMega2561, AtMega1281 or AtMega1284p
+ * 
+ * - On Melzi boards connect BT to TX1 and RX1 pins, then set 
+ *   BLUETOOTH_SERIAL to 1
+ * - On RUMBA boards connect BT to pin 11 and 12 of X3 connector, then 
+ *   set BLUETOOTH_SERIAL to 3
+ * - On RAMBO boards connect BT to pins 5,6 or 7,8 or 9,10 on Serial 
+ *   connector, then accordingly set BLUETOOTH_SERIAL to 1,2 or 3
+ * - On RAMPS we must remap Y_ENDSTOPS pins or Z_ENDSTOPZ pins or 
+ *   LCD_ENABLE and LCD_RS pins to another pins, and connect BT to:
+ *     a) signals of Y_MIN, Y_MAX, then set BLUETOOTH_SERIAL to 3 
+ *        (RX from BT to Y_MIN, TX from BT to Y_MAX)
+ *     b) signals of Z_MIN, Z_MAX, then set BLUETOOTH_SERIAL to 1 
+ *        (RX from BT to Z_MIN, TX from BT to Z_MAX)
+ *     c) pin 17 and 18 of AUX4 connector, then set BLUETOOTH_SERIAL 
+ *        to 2 (RX from BT to AUX4 p18, TX from BT to AUX4 p17)
+ * 
+ * Comment out or set the BLUETOOTH_SERIAL to 0 or -1 to disable this 
+ * feature.
+ */
+ 
+/**
+ * Port number (1..3) - For RUMBA use 3
+ */
+#define BLUETOOTH_SERIAL   1
+
+/**
+ * communication speed
+ */
+#define BLUETOOTH_BAUD     115200
+
+
+/** Uncomment the following line if you are using Arduino compatible 
+ * firmware made for Arduino version earlier then 1.0
+ * If it is incompatible you will get compiler errors about write 
+ * functions not being compatible!
+ */
 //#define COMPAT_PRE1
 
-/* Define the type of axis movements needed for your printer. The typical case
-is a full cartesian system where x, y and z moves are handled by separate motors.
-
-0 = full cartesian system, xyz have separate motors.
-1 = z axis + xy H-gantry (x_motor = x+y, y_motor = x-y)
-2 = z axis + xy H-gantry (x_motor = x+y, y_motor = y-x)
-3 = Delta printers (Rostock, Kossel, RostockMax, Cerberus, etc)
-4 = Tuga printer (Scott-Russell mechanism)
-5 = Bipod system (not implemented)
-8 = y axis + xz H-gantry (x_motor = x+z, z_motor = x-z)
-9 = y axis + xz H-gantry (x_motor = x+z, z_motor = z-x)
-Cases 1, 2, 8 and 9 cover all needed xy and xz H gantry systems. If you get results mirrored etc. you can swap motor connections for x and y.
-If a motor turns in the wrong direction change INVERT_X_DIR or INVERT_Y_DIR.
-*/
+/**
+ * Define the type of axis movements needed for your printer. 
+ * The typical case is a full cartesian system where x, y and z moves 
+ * are handled by separate motors.
+ * 
+ * 0 = full cartesian system, xyz have separate motors.
+ * 1 = z axis + xy H-gantry (x_motor = x+y, y_motor = x-y)
+ * 2 = z axis + xy H-gantry (x_motor = x+y, y_motor = y-x)
+ * 3 = Delta printers (Rostock, Kossel, RostockMax, Cerberus, etc)
+ * 4 = Tuga printer (Scott-Russell mechanism)
+ * 5 = Bipod system (not implemented)
+ * 8 = y axis + xz H-gantry (x_motor = x+z, z_motor = x-z)
+ * 9 = y axis + xz H-gantry (x_motor = x+z, z_motor = z-x)
+ * 
+ * Cases 1, 2, 8 and 9 cover all needed xy and xz H gantry systems. 
+ * If you get results mirrored etc. you can swap motor connections for 
+ * x and y. If a motor turns in the wrong direction change INVERT_X_DIR 
+ * or INVERT_Y_DIR.
+ */
 #define DRIVE_SYSTEM 0
-/*
-  Normal core xy implementation needs 2 virtual steps for a motor step to guarantee
-  that every tiny move gets maximum one step regardless of direction. This can cost
-  some speed, so alternatively you can activate the FAST_COREXYZ by uncommenting
-  the define. This solves the core movements as nonlinear movements like done for
-  deltas but without the complicated transformations. Since transformations are still
-  linear you can reduce delta computations per second to 10 and also use 10 
-  subsegments instead of 20 to reduce memory usage.
-*/
+
+/**
+ * Normal core xy implementation needs 2 virtual steps for a motor step 
+ * to guarantee that every tiny move gets maximum one step regardless of 
+ * direction. This can cost some speed, so alternatively you can 
+ * activate the FAST_COREXYZ by uncommenting the define. This solves the 
+ * core movements as nonlinear movements like done for deltas but without 
+ * the complicated transformations. Since transformations are still 
+ * linear you can reduce delta computations per second to 10 and also 
+ * use 10 subsegments instead of 20 to reduce memory usage.
+ */
 //#define FAST_COREXYZ
 
-/* You can write some GCODE to be executed on startup. Use this e.g. to set some 
-pins. Separate multiple GCODEs with \n
-*/
-//#define STARTUP_GCODE ""
+/** 
+ * You can write some GCODE to be executed on startup. Use this e.g. to 
+ * set some pins. Separate multiple GCODEs with \n
+ */
+#define STARTUP_GCODE "M320"
 
 // ##########################################################################################
-// ##                               Calibration                                            ##
+// ##                               inclusion                                            ##
 // ##########################################################################################
 
 #include "config/config-calibration.h"
@@ -165,27 +214,27 @@ pins. Separate multiple GCODEs with \n
 #include "config/config-extruder-control.h"
 
 
-
-
-
-
-
 // ##########################################################################################
 // ##                           Communication configuration                                ##
 // ##########################################################################################
 
 //// AD595 THERMOCOUPLE SUPPORT UNTESTED... USE WITH CAUTION!!!!
 
-/** \brief Communication speed.
-
-- 250000 : Fastest with error rate of 0% with 16 or 32 MHz - update wiring_serial.c in your board files. See boards/readme.txt
-- 115200 : Fast, but may produce communication errors on quite regular basis, Error rate -3,5%
-- 76800 : Best setting for Arduino with 16 MHz, Error rate 0,2% page 198 AVR1284 Manual. Result: Faster communication then 115200
-- 57600 : Should produce nearly no errors, on my gen 6 it's faster than 115200 because there are no errors slowing down the connection
-- 38600
-
- Overridden if EEPROM activated.
-*/
+/**
+ * 
+ * 
+ * - 250000 = Fastest with error rate of 0% with 16 or 32 MHz - 
+ *            update wiring_serial.c in your board files. See boards/readme.txt
+ * - 115200 = Fast, but may produce communication errors on quite regular basis, 
+ *            Error rate -3,5%
+ * - 76800  = Best setting for Arduino with 16 MHz, Error rate 0,2% page 198 
+ *            AVR1284 Manual. Result: Faster communication then 115200
+ * - 57600  = Should produce nearly no errors, on my gen 6 it's faster than 
+ *            115200 because there are no errors slowing down the connection
+ * - 38600
+ *
+ * Overridden if EEPROM activated.
+ */
 //#define BAUDRATE 76800
 #define BAUDRATE 115200
 //#define BAUDRATE 250000
